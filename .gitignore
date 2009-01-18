@@ -1,0 +1,6 @@
+out
+.DS_Store
+.classpath
+.project
+.settings/
+stacktrace.log
