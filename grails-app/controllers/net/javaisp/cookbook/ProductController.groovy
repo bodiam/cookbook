@@ -79,127 +79,30 @@ class ProductController {
     }
 
     def findRecipesByProduct = {
-      println "7"
-
-      println params.products
-
       if(params.products) {
         def productIds = params.products.collect { it.toLong() }
 
         // Find all recipes which have the selected products
-       
         def recipes = Recipe.executeQuery("select distinct(r) from net.javaisp.cookbook.Recipe as r " +
                                           "inner join r.ingredients as i " +
                                           "inner join i.product as p " +
                                           "where p.id in (:products)" +
                                            "group by r.id having count(*) = :length", [products:productIds, length:productIds.size() as Long])
-        /*
-        select r.id, count(*) from recipe r
-join recipe_ingredient ri on r.id = ri.recipe_ingredients_id
-join ingredient i on i.id = ri.ingredient_id
-join product p on p.id = i.product_id
-where p.id in (1, 2,3,4,5)
-group by r.id having count(*) = 5
-         */
 
-
-        // Loop door alle producten er verwijder de producten die niet alle producten hebben
-
-
-
-/*
-def sessionFactory = ctx.sessionFactory
-def session = sessionFactory.getCurrentSession()
-
-Criteria criteria = session.createCriteria(Recipe.class)
-criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-List recipes = criteria.createCriteria("ingredients").createCriteria("product").add(Property.forName("id").in( [1L, 2L, 3L] )).list()
-*/
-
-        //select tag.text, count(snippet.id) from Tag as tag inner join tag.snippets as snippet group by tag.text
-
-
-        /*
-        def session = sessionFactory.getCurrentSession()
-        Query q = session.createQuery("select distinct(r) from net.javaisp.cookbook.Recipe as r inner join r.ingredients as i ")
-        def recipes =  q.list()
-        */
-
-/*
-        def recipes = Recipe.executeQuery("select r from net.javaisp.cookbook.Recipe as r " +
-                                          "inner join r.ingredients as i " +
-                                          "inner join i.product as p " +
-                                          "where p.id in (:products)", [products:productIds])
-*/
-
-
-        /*
-        def recipes = Recipe.findAll(
-                "from net.javaisp.cookbook.Recipe as r ")
-             //   "inner join r.ingredients as i ")
-               // "inner join i.product as p " +
-               // "where p.id in (:products)", [products:productIds])
-*/
-
-
-
-        /*
-        def c = Recipe.createCriteria()
-        c.resultTransformer = CriteriaSpecification.DISTINCT_ROOT_ENTITY
-        c.fetchMode "recipe", FM.SELECT
-
-        def recipes = c.list() {
-            ingredients {
-               product {
-                 'in'('id', productIds)
-               }
-            }
-        }*/
-
-
-        /** ===== TODO ===========
-         *
-
- Maarten Winkels
-10:00 AM
-je zou SELECT kunnen proberen als fetch mode
-10:00 AM
-
-dan wordt het recept alleen gequeried in de eerste select en komt de rest van de data in een volgende select (denk ik)
-Erik Pragt
-10:00 AM
-(ff standup... BRB)
-10:00 AM
-
-ff proberen zo
-Maarten Winkels
-10:00 AM
-maar je kan ook een betere query formuleren
-10:00 AM
-
-met een subquery (want dat is wat je eigenlijk wil)
-10:01 AM
-
-select recipe inner join ingredients inner join product where recipe.is in (select recipe.id inner join ingredients inner join product where product.id in (...))
-         *
-         *
-         */
-
-                
-
-        println "recipes 2 : " + recipes
-
-        recipes.each { recipe ->
-          println "> " + recipe.getClass()
-        }
-
-        def json = recipes as JSON
-
-        println "findRecipesByProduct result : " + json
-
-        render json
+        render recipes as JSON
       }
     }
+
+    def findRecipesByName = {
+      if(params.name) {
+        def recipes = Recipe.findAllByNameLike("%${params.name}%")
+
+        log.debug "findRecipesByName returned ${recipes.size()} recipes: ${recipes}"
+
+        render recipes as JSON
+      }
+    }
+
 
 
     def ajaxJSON = {

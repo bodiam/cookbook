@@ -10,6 +10,8 @@ class Recipe {
 
     Country countryOfOrigin
 
+    List ingredients
+
     static hasMany = [
             ingredients: Ingredient
     ]
@@ -22,8 +24,6 @@ class Recipe {
         preparation(nullable:true)
         countryOfOrigin(nullable:true)
     }
-
-    static fetchMode = [ingredients:"eager"]
 
     String toString() {
       "${id}"

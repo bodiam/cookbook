@@ -1,4 +1,4 @@
-html * {
+thtml * {
     margin: 0;
     /*padding: 0; SELECT NOT DISPLAYED CORRECTLY IN FIREFOX */
 }
@@ -129,6 +129,7 @@ td.errors input {
 
 /* TABLES */
 
+
 table {
     border: 1px solid #ccc;
     width: 100%
@@ -159,8 +160,8 @@ th a:link, th a:visited, th a:hover {
     width: 100%;
 }
 th.asc a, th.desc a {
-    background-position: right;
-    background-repeat: no-repeat;
+    background: no-repeat right;
+
 }
 th.asc a {
     background-image: url(../images/skin/sorted_asc.gif);

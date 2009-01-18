@@ -1,0 +1,11 @@
+Create basic search on recipe name          [DONE]
+ - Create UI                [done]
+ - Create jQuery            [done]
+ - Create controller        [done]
+ (someday: optimize code)
+
+View Recipe
+ - Create UI
+ - Controller
+
+Vinkjes/streepjes in text van recept (van . tot . ?)
